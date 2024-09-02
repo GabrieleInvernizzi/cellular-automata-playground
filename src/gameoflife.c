@@ -37,6 +37,24 @@ static unsigned int count_alive_neighs(GameOfLife* g, unsigned int i, unsigned i
     return res;
 }
 
+static int reset_gameoflife(GameOfLife* g) {
+    unsigned int width = g->width;
+    unsigned int height = g->height;
+    float alive_perc = g->init_alive_percentage;
+
+    deinit_gameoflife(g);
+    return init_gameoflife(g, width, height, alive_perc);
+}
+
+static void check_input(GameOfLife* g) {
+    if (IsKeyPressed(KEY_SPACE))
+        g->is_paused = !g->is_paused;
+    if (IsKeyPressed(KEY_R))
+        g->should_reset = true;
+    if (IsKeyPressed(KEY_M) || IsKeyPressed(KEY_ESCAPE))
+        g->is_menu_active = !g->is_menu_active;
+}
+
 
 int init_gameoflife(GameOfLife* g, unsigned int width, unsigned int height, float alive_percentage) {
     g->current_grid = (bool*)malloc((width)*(height)*sizeof(bool));
@@ -46,9 +64,12 @@ int init_gameoflife(GameOfLife* g, unsigned int width, unsigned int height, floa
         return -1;
     }
 
+    g->should_reset = false;
     g->is_paused = false;
+    g->is_menu_active = false;
     g->width = width;
     g->height = height;
+    g->init_alive_percentage = alive_percentage;
 
     for (size_t i = 0; i < height; i++) {
         for (size_t j = 0; j < width; j++) {
@@ -69,7 +90,13 @@ void deinit_gameoflife(GameOfLife* g) {
 }
 
 void step_gameoflife(GameOfLife* g) {
+    check_input(g);
+
+    if (g->should_reset) {
+        reset_gameoflife(g);        // TODO: check for error code.
+    }
     if (g->is_paused) return;
+
 
     for (unsigned int i = 0; i < g->height; i++) {
         for (unsigned int j = 0; j < g->width; j++) {
@@ -90,6 +117,15 @@ void step_gameoflife(GameOfLife* g) {
     }
 
     swap_grids_gameoflife(g);
+}
+
+static void render_menu_gameoflife(GameOfLife* g, int r_width, int r_height) {
+    DrawRectangle(0, 0, r_width, r_height, ColorAlpha(BLACK, 0.9));     
+
+    int font_size = r_width/15;
+
+    int text_width = MeasureText("WOP menu", font_size);
+    DrawText("WIP menu", (r_width - text_width)/2, (r_height-font_size)/2 , font_size, RAYWHITE);
 }
 
 void render_gameoflife(GameOfLife* g) {
@@ -121,6 +157,11 @@ void render_gameoflife(GameOfLife* g) {
 
             DrawRectangleV(pos, cell_size, is_alive ? WHITE : BLACK);
         }
+    }
+
+
+    if (g->is_menu_active) {
+        render_menu_gameoflife(g, r_width, r_height);
     }
 }
 

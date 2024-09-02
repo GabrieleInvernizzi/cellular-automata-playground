@@ -5,8 +5,9 @@
 
 typedef struct {
     unsigned int width, height;
+    float init_alive_percentage;
     bool *current_grid, *grid;
-    bool is_paused;
+    bool is_paused, should_reset, is_menu_active;
 } GameOfLife;
 
 
