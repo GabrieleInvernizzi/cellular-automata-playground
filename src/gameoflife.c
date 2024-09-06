@@ -52,8 +52,10 @@ static void check_input(GameOfLife* g) {
         g->is_paused = !g->is_paused;
     if (IsKeyPressed(KEY_R))
         g->should_reset = true;
-    if (IsKeyPressed(KEY_M) || IsKeyPressed(KEY_ESCAPE))
+    if (IsKeyPressed(KEY_M) || IsKeyPressed(KEY_ESCAPE)) {
         g->is_menu_active = !g->is_menu_active;
+        g->is_paused = g->is_menu_active;
+    }
 }
 
 
