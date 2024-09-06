@@ -2,11 +2,11 @@
 
 #include "raylib.h"
 
-int min(int a, int b) {
+int imin(int a, int b) {
     return a < b ? a : b;
 }
 
-int max(int a, int b) {
+int imax(int a, int b) {
     return a > b ? a : b;
 }
 

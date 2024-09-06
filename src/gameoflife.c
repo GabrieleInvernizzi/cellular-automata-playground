@@ -1,6 +1,7 @@
 #include "gameoflife.h"
 
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "raylib.h"
 #include "raymath.h"
@@ -73,9 +74,8 @@ int init_gameoflife(GameOfLife* g, unsigned int width, unsigned int height, floa
 
     for (size_t i = 0; i < height; i++) {
         for (size_t j = 0; j < width; j++) {
-            if(get_random_float() < alive_percentage) {
-                set_cell(g, i, j, true);
-            }
+            bool val = get_random_float() < alive_percentage;
+            set_cell(g, i, j, val);
         }
     }
 
@@ -134,7 +134,7 @@ void render_gameoflife(GameOfLife* g) {
 
     int scale_width = r_width/g->width;
     int scale_height = r_height/g->height;
-    int cell_size_scalar = min(scale_height, scale_width);
+    int cell_size_scalar = imin(scale_height, scale_width);
 
     Vector2 cell_size = Vector2Scale(Vector2One(), cell_size_scalar);
     Vector2 offset = 
