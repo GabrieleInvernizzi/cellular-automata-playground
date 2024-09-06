@@ -1,10 +1,10 @@
 #include "gameoflife.h"
 
 #include <stdlib.h>
-#include <stdio.h>
 
 #include "raylib.h"
 #include "raymath.h"
+#include <raygui.h>
 
 #include "utils.h"
 
@@ -121,13 +121,18 @@ void step_gameoflife(GameOfLife* g) {
     swap_grids_gameoflife(g);
 }
 
-static void render_menu_gameoflife(GameOfLife* g, int r_width, int r_height) {
-    DrawRectangle(0, 0, r_width, r_height, ColorAlpha(BLACK, 0.9));     
+static void render_menu_gameoflife(GameOfLife* g, int w, int h) {
+    Color menu_background_col = GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR));
+    DrawRectangle(0, 0, w, h, ColorAlpha(menu_background_col, 0.9));     
 
-    int font_size = r_width/15;
+    int font_size = w * 0.05;
 
-    int text_width = MeasureText("WOP menu", font_size);
-    DrawText("WIP menu", (r_width - text_width)/2, (r_height-font_size)/2 , font_size, RAYWHITE);
+    float w10 = w*0.1;
+    float w80 = w-w10*2;
+    float h5 = h*0.05;
+    float h90 = h-h5*2;
+
+    GuiGroupBox((Rectangle) {.x=w10, .y=h5, .width=w80, .height=h90}, "Menu");
 }
 
 void render_gameoflife(GameOfLife* g) {

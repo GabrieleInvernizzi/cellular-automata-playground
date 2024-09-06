@@ -1,4 +1,10 @@
+#include <stdlib.h>
+#include <string.h>
+
 #include "raylib.h"
+#include "raygui.h"
+
+#include "style_dark.h"
 
 #include "gameoflife.h"
 
@@ -17,6 +23,7 @@ int main(void)
     GameOfLife g;
     init_gameoflife(&g, 150, 150, 0.6);
 
+    GuiLoadStyleDark();
     
     while (!WindowShouldClose())
     {
